@@ -113,3 +113,22 @@ Once the .perfetto-trace file is in Perfetto_traces/, you can:
 - Open it in your Python notebooks for analysis (e.g., using Perfetto Trace Processor Python API).
 - Optionally open it in the Perfetto UI (https://ui.perfetto.dev) by dragging and dropping the file, to visually inspect timelines and power rails before or after running notebooks.
 
+## Measurement detail
+
+- The perfetto.trace file includes the power.rails and many other details.
+- The power.rails report the accumulated energy of the different parts including display, RF frontend module, modem, mmwave, ...
+- Also, it reports a corresponding time vector.
+- So, to convert the accumulated energy to power, we use the following approach:
+  - $t_1$ and $t_2$, $E_1$ and $E_2$
+  - $P_1 = \frac{E_2 - E_1}{t_2 - t_1}$ corresponding to $\frac{t_1 + t_2}{2}$
+
+## Analysis Codes
+
+The analysis codes in the `Analysis Codes/` folder help you process and visualize the power rails data:
+
+- **`00_ListRails.ipynb`** - Use this notebook first to export the IDs for the rails of interest. The rail IDs are different for different phone models, so you need to run this to identify which rails are available in your trace and get their corresponding IDs.
+
+- **`01_PowerBarChart_RailsOfInterest.ipynb`** - Once you have identified the rails of interest using the 00 notebook, use this code to generate power bar charts for those specific rails.
+
+- **`02_power_with_time.ipynb`** - Use this notebook to analyze and visualize how power consumption changes over time for the rails of interest.
+
